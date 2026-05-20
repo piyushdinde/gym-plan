@@ -8,13 +8,13 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #0f0f0f;
-  --card-bg: #1a1a1a;
-  --card-border: #2a2a2a;
-  --text: #ffffff;
-  --text-muted: #888888;
-  --done-bg: #111111;
-  --done-text: #444444;
+  --bg: #f5f5f7;
+  --card-bg: #ffffff;
+  --card-border: #e0e0e0;
+  --text: #1a1a1a;
+  --text-muted: #666666;
+  --done-bg: #f0f0f0;
+  --done-text: #bbbbbb;
   --day-color: #185FA5;
 }
 
@@ -74,13 +74,13 @@ body {
   cursor: pointer;
   text-align: center;
   transition: all 0.2s;
-  background: #222;
+  background: #e8e8e8;
   color: #888;
 }
 
 .day-tab.active {
   color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 /* Main content */
@@ -131,7 +131,7 @@ body {
 
 .progress-bar {
   height: 4px;
-  background: #222;
+  background: #ddd;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -284,8 +284,8 @@ body {
   font-weight: 500;
   cursor: pointer;
   background: transparent;
-  border: 1.5px solid #555;
-  color: #aaa;
+  border: 1.5px solid #ccc;
+  color: #666;
   transition: all 0.2s;
 }
 
@@ -294,15 +294,15 @@ body {
 }
 
 .demo-btn.open {
-  background: #333;
-  border-color: #666;
+  background: #e8e8e8;
+  border-color: #999;
 }
 
 .done-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid #333;
+  border: 2px solid #ccc;
   background: transparent;
   cursor: pointer;
   display: flex;
@@ -347,7 +347,7 @@ body {
 }
 
 .demo-gif-wrap {
-  background: #111;
+  background: #f0f0f0;
   border-radius: 10px;
   overflow: hidden;
   text-align: center;
@@ -370,7 +370,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
+  color: #aaa;
   font-size: 13px;
 }
 
@@ -448,7 +448,7 @@ body {
 
 .timer-exercise-name {
   font-size: 16px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.6);
   text-align: center;
   padding: 0 20px;
 }
@@ -457,7 +457,7 @@ body {
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.6);
 }
 
 .timer-circle-wrap {
@@ -474,7 +474,7 @@ body {
 
 .timer-circle-bg {
   fill: none;
-  stroke: #222;
+  stroke: #ddd;
   stroke-width: 6;
 }
 
@@ -494,14 +494,15 @@ body {
   font-size: 48px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  color: #fff;
 }
 
 .timer-skip {
   padding: 12px 40px;
   border-radius: 20px;
-  border: 1.5px solid #555;
+  border: 1.5px solid rgba(255,255,255,0.4);
   background: transparent;
-  color: var(--text);
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -509,7 +510,7 @@ body {
 }
 
 .timer-skip:active {
-  background: #222;
+  background: rgba(255,255,255,0.1);
 }
 </style>
 </head>
@@ -737,7 +738,7 @@ function renderTabs() {
   const container = document.getElementById('dayTabs');
   container.innerHTML = DAYS.map((d, i) => {
     const isActive = d === activeDay;
-    const bg = isActive ? COLORS[d] : '#222';
+    const bg = isActive ? COLORS[d] : '#e8e8e8';
     const color = isActive ? '#fff' : '#888';
     return `<button class="day-tab${isActive ? ' active' : ''}" data-day="${d}" style="background:${bg};color:${color}">${DAY_LABELS[i]}</button>`;
   }).join('');
