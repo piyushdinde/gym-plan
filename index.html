@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Piyush's Gym Plan</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0f0f0f;
+  --card-bg: #1a1a1a;
+  --card-border: #2a2a2a;
+  --text: #ffffff;
+  --text-muted: #888888;
+  --done-bg: #111111;
+  --done-text: #444444;
+  --day-color: #185FA5;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: 40px;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  padding: 12px 16px 0;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.app-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.header-date {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  padding-bottom: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.day-tab {
+  flex: 1;
+  min-width: 52px;
+  padding: 8px 4px;
+  border-radius: 20px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  background: #222;
+  color: #888;
+}
+
+.day-tab.active {
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Main content */
+.main {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Hero */
+.hero {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-day {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.hero-focus {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.hero-time {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* Progress bar */
+.progress-wrap {
+  margin-bottom: 16px;
+}
+
+.progress-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 4px;
+  background: #222;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* Warm-up / Cardio strips */
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.strip-icon {
+  font-size: 18px;
+  width: 28px;
+  text-align: center;
+}
+
+.strip-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.strip-text {
+  font-size: 14px;
+}
+
+/* Section divider */
+.section-divider {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin: 20px 0 12px;
+  padding-left: 4px;
+}
+
+/* Exercise card */
+.exercise-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.exercise-card.done {
+  background: var(--done-bg);
+}
+
+.exercise-card.done .ex-name,
+.exercise-card.done .ex-muscle,
+.exercise-card.done .ex-pill,
+.exercise-card.done .rest-btn,
+.exercise-card.done .demo-btn {
+  opacity: 0.35;
+}
+
+.ex-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ex-info {
+  flex: 1;
+}
+
+.ex-number {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.ex-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  transition: color 0.3s;
+}
+
+.ex-muscle {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-top: 2px;
+  transition: color 0.3s;
+}
+
+.ex-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ex-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.ex-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+.rest-btn {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  border: 1.5px solid;
+  transition: opacity 0.3s;
+}
+
+.demo-btn {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  border: 1.5px solid #555;
+  color: #aaa;
+  transition: all 0.2s;
+}
+
+.demo-btn:active {
+  background: #333;
+}
+
+.demo-btn.open {
+  background: #333;
+  border-color: #666;
+}
+
+.done-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.done-btn.checked {
+  border-color: #4CAF50;
+  background: #4CAF50;
+}
+
+.done-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.done-btn.checked svg {
+  stroke: #fff;
+}
+
+/* Demo GIF area */
+.demo-area {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, margin 0.35s ease, opacity 0.25s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.demo-area.show {
+  max-height: 400px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+.demo-gif-wrap {
+  background: #111;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  min-height: 180px;
+}
+
+.demo-gif-wrap img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.demo-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 13px;
+}
+
+.demo-gif-wrap img.loaded ~ .demo-loading {
+  display: none;
+}
+
+/* Saturday options */
+.sat-option {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sat-option:active {
+  transform: scale(0.98);
+}
+
+.sat-option.selected {
+  border-color: var(--day-color);
+}
+
+.sat-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sat-exercise {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sat-details {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.sat-tip {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+}
+
+/* Timer overlay */
+.timer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.timer-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.timer-exercise-name {
+  font-size: 16px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0 20px;
+}
+
+.timer-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+.timer-circle-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.timer-circle-wrap svg {
+  width: 220px;
+  height: 220px;
+  transform: rotate(-90deg);
+}
+
+.timer-circle-bg {
+  fill: none;
+  stroke: #222;
+  stroke-width: 6;
+}
+
+.timer-circle-fg {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.timer-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-skip {
+  padding: 12px 40px;
+  border-radius: 20px;
+  border: 1.5px solid #555;
+  background: transparent;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.timer-skip:active {
+  background: #222;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="app-name">Piyush's Gym Plan</div>
+    <div class="header-date" id="headerDate"></div>
+  </div>
+  <div class="day-tabs" id="dayTabs"></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<div class="timer-overlay" id="timerOverlay">
+  <div class="timer-exercise-name" id="timerExName"></div>
+  <div class="timer-label">Rest</div>
+  <div class="timer-circle-wrap">
+    <svg viewBox="0 0 220 220">
+      <circle class="timer-circle-bg" cx="110" cy="110" r="100"/>
+      <circle class="timer-circle-fg" id="timerCircle" cx="110" cy="110" r="100"
+        stroke-dasharray="628.32" stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-time" id="timerTime">0:00</div>
+  </div>
+  <button class="timer-skip" id="timerSkip">Skip</button>
+</div>
+
+<script>
+const DAYS = ['mon','tue','wed','thu','fri','sat'];
+const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+const COLORS = {
+  mon: '#185FA5',
+  tue: '#27500A',
+  wed: '#854F0B',
+  thu: '#3C3489',
+  fri: '#72243E',
+  sat: '#085041'
+};
+
+const GIF_BASE = 'https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/';
+
+// GIF mapping: exercise name -> GIF path (carefully matched to actual exercise)
+const EXERCISE_GIFS = {
+  // Monday - Push
+  'Smith machine bench press':    'videos/0748-trqKQv2.gif',  // smith bench press
+  'Incline chest press machine':  'videos/1299-jHAnWmT.gif',  // lever incline chest press
+  'Pec fly machine':              'videos/0596-v3xmPAR.gif',  // lever seated fly (pec deck)
+  'Dip assist (dip mode)':        'videos/0009-PAgTVaK.gif',  // assisted chest dip
+  'Triceps machine':              'videos/0607-Ser9eQp.gif',  // lever triceps extension
+
+  // Tuesday - Pull
+  'Chin-up assist (chin-up mode)':'videos/0572-MaMuGH6.gif',  // lever assisted chin-up
+  'DB bent-over row':             'videos/0293-BJ0Hz5L.gif',  // dumbbell bent over row
+  'Rear delt fly (pec fly machine)':'videos/0602-myfUsKf.gif',// lever seated reverse fly
+  'Biceps machine':               'videos/0575-q6y3OhV.gif',  // lever bicep curl
+  'DB hammer curl':               'videos/0313-slDvUAU.gif',  // dumbbell hammer curl
+
+  // Wednesday - Legs
+  'Smith machine squat':          'videos/0770-jFtipLl.gif',  // smith squat
+  'Leg press machine':            'videos/0739-10Z2DXU.gif',  // sled 45 degree leg press
+  'Leg extension':                'videos/0585-my33uHU.gif',  // lever leg extension
+  'Leg curl (seated)':            'videos/0599-Zg3XY7P.gif',  // lever seated leg curl
+  'Standing hamstring curl':      'videos/0795-C5jncD2.gif',  // standing single leg curl
+
+  // Thursday - Shoulders
+  'DB shoulder press':            'videos/0388-QT5Q0nK.gif',  // dumbbell seated alternate press
+  'Lateral raise machine':        'videos/0584-dRTfGZT.gif',  // lever lateral raise
+  'DB lateral raise drop set':    'videos/0334-DsgkuIt.gif',  // dumbbell lateral raise
+
+  // Thursday + Friday - Core
+  'Plank':                        'videos/2135-VBAWRPG.gif',  // weighted front plank (same form)
+  'Crunches':                     'videos/0274-TFqbd8t.gif',  // crunch floor
+  'Leg raises':                   'videos/0620-WhuFnR7.gif',  // lying leg raise flat bench
+  'Bicycle crunches':             'videos/0003-1ZFqTDN.gif',  // air bike (bicycle crunch)
+  'Mountain climbers':            'videos/0630-RJgzwny.gif',  // mountain climber
+
+  // Friday - Arms
+  'DB incline curl':              'videos/0318-ae9UoXQ.gif',  // dumbbell incline curl
+  'DB overhead tricep extension': 'videos/0362-nAuHPcD.gif',  // dumbbell one arm triceps extension
+};
+
+const WORKOUT = {
+  mon: {
+    focus: 'Push Day',
+    subtitle: 'Chest + Triceps',
+    warmup: '5 min treadmill walk',
+    cardio: '10 min incline treadmill walk — incline 8-10, speed 5-6 kmph',
+    exercises: [
+      { name: 'Smith machine bench press', muscle: 'Chest (primary compound)', sets: '4 x 10', rest: 75 },
+      { name: 'Incline chest press machine', muscle: 'Upper chest', sets: '3 x 12', rest: 60 },
+      { name: 'Pec fly machine', muscle: 'Mid chest, isolation', sets: '3 x 15', rest: 45 },
+      { name: 'Dip assist (dip mode)', muscle: 'Triceps + lower chest', sets: '3 x 10', rest: 60 },
+      { name: 'Triceps machine', muscle: 'Triceps isolation finisher', sets: '3 x 15', rest: 45 }
+    ]
+  },
+  tue: {
+    focus: 'Pull Day',
+    subtitle: 'Back + Biceps',
+    warmup: '5 min elliptical, easy pace',
+    cardio: '10 min elliptical at moderate intensity',
+    exercises: [
+      { name: 'Chin-up assist (chin-up mode)', muscle: 'Lats + biceps', sets: '4 x 8', rest: 90 },
+      { name: 'DB bent-over row', muscle: 'Mid back, rhomboids', sets: '4 x 10', rest: 75 },
+      { name: 'Rear delt fly (pec fly machine)', muscle: 'Rear shoulders, upper back', sets: '3 x 15', rest: 45 },
+      { name: 'Biceps machine', muscle: 'Biceps isolation', sets: '3 x 12', rest: 45 },
+      { name: 'DB hammer curl', muscle: 'Brachialis + forearm', sets: '2 x 15', rest: 45 }
+    ]
+  },
+  wed: {
+    focus: 'Leg Day',
+    subtitle: 'Legs + Glutes',
+    warmup: '5 min cycling, easy resistance',
+    cardio: null,
+    cardioNote: 'No cardio finish — leg day already burns maximum calories',
+    exercises: [
+      { name: 'Smith machine squat', muscle: 'Full legs + glutes', sets: '4 x 10', rest: 90 },
+      { name: 'Leg press machine', muscle: 'Quads, glutes, inner thigh', sets: '4 x 12', rest: 75 },
+      { name: 'Leg extension', muscle: 'Quad isolation', sets: '3 x 15', rest: 60 },
+      { name: 'Leg curl (seated)', muscle: 'Hamstrings', sets: '3 x 12', rest: 60 },
+      { name: 'Standing hamstring curl', muscle: 'Hamstrings + calves', sets: '3 x 12', rest: 60 }
+    ]
+  },
+  thu: {
+    focus: 'Shoulder Day',
+    subtitle: 'Shoulders + Core',
+    warmup: '5 min light cycling',
+    cardio: '10 min incline treadmill walk',
+    exercises: [
+      { name: 'DB shoulder press', muscle: 'Front + side delt compound', sets: '4 x 12', rest: 75 },
+      { name: 'Lateral raise machine', muscle: 'Side delts, shoulder width', sets: '4 x 15', rest: 45 },
+      { name: 'Rear delt fly (pec fly machine)', muscle: 'Rear delt, posture', sets: '3 x 15', rest: 45 },
+      { name: 'DB lateral raise drop set', muscle: '10kg > drop to 6kg mid-set', sets: '2 x 20', rest: 60 }
+    ],
+    core: [
+      { name: 'Plank', sets: '3 x 45s', rest: 30 },
+      { name: 'Crunches', sets: '3 x 20', rest: 30 },
+      { name: 'Leg raises', sets: '3 x 15', rest: 30 }
+    ]
+  },
+  fri: {
+    focus: 'Arms Day',
+    subtitle: 'Arms + Core',
+    warmup: '5 min elliptical, easy',
+    cardio: '15 min cycling, easy pace',
+    sections: [
+      {
+        label: 'Biceps',
+        exercises: [
+          { name: 'Biceps machine', muscle: 'Biceps isolation', sets: '4 x 12', rest: 45 },
+          { name: 'DB incline curl', muscle: 'Long head bicep stretch', sets: '3 x 12', rest: 45 }
+        ]
+      },
+      {
+        label: 'Triceps',
+        exercises: [
+          { name: 'Triceps machine', muscle: 'Triceps isolation', sets: '4 x 12', rest: 45 },
+          { name: 'DB overhead tricep extension', muscle: 'Long head tricep stretch', sets: '3 x 12', rest: 45 }
+        ]
+      }
+    ],
+    core: [
+      { name: 'Bicycle crunches', sets: '3 x 20', rest: 30 },
+      { name: 'Mountain climbers', sets: '3 x 30s', rest: 30 }
+    ]
+  },
+  sat: {
+    focus: 'Cardio Day',
+    subtitle: 'Active Recovery',
+    warmup: null,
+    options: [
+      { label: 'A', exercise: 'Treadmill steady state', duration: '45 min', intensity: 'Zone 2 — can talk but slightly breathless' },
+      { label: 'B', exercise: 'Elliptical steady state', duration: '45 min', intensity: 'Zone 2' },
+      { label: 'C', exercise: 'HIIT (treadmill or bike)', duration: '20 min', intensity: '40 sec fast / 20 sec slow, repeat' }
+    ]
+  }
+};
+
+// State
+let activeDay = 'mon';
+let doneState = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[] };
+let openDemos = new Set();
+
+// LocalStorage
+function loadState() {
+  const today = getToday();
+  const stored = localStorage.getItem('gymplan_date');
+  const storedDone = localStorage.getItem('gymplan_done');
+  if (stored === today && storedDone) {
+    doneState = JSON.parse(storedDone);
+  } else {
+    doneState = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[] };
+    saveState();
+  }
+}
+
+function saveState() {
+  localStorage.setItem('gymplan_date', getToday());
+  localStorage.setItem('gymplan_done', JSON.stringify(doneState));
+}
+
+function getToday() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function getCurrentDayKey() {
+  const jsDay = new Date().getDay();
+  const map = { 1:'mon', 2:'tue', 3:'wed', 4:'thu', 5:'fri', 6:'sat' };
+  return map[jsDay] || 'mon';
+}
+
+function formatHeaderDate() {
+  const d = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+// Render tabs
+function renderTabs() {
+  const container = document.getElementById('dayTabs');
+  container.innerHTML = DAYS.map((d, i) => {
+    const isActive = d === activeDay;
+    const bg = isActive ? COLORS[d] : '#222';
+    const color = isActive ? '#fff' : '#888';
+    return `<button class="day-tab${isActive ? ' active' : ''}" data-day="${d}" style="background:${bg};color:${color}">${DAY_LABELS[i]}</button>`;
+  }).join('');
+
+  container.querySelectorAll('.day-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeDay = btn.dataset.day;
+      openDemos.clear();
+      document.documentElement.style.setProperty('--day-color', COLORS[activeDay]);
+      renderTabs();
+      renderDay();
+    });
+  });
+}
+
+function getAllExerciseCount(day) {
+  const data = WORKOUT[day];
+  if (day === 'sat') return data.options.length;
+  let count = 0;
+  if (data.exercises) count += data.exercises.length;
+  if (data.sections) data.sections.forEach(s => count += s.exercises.length);
+  if (data.core) count += data.core.length;
+  return count;
+}
+
+function toggleDone(day, idx) {
+  const arr = doneState[day];
+  const pos = arr.indexOf(idx);
+  if (pos > -1) arr.splice(pos, 1);
+  else arr.push(idx);
+  saveState();
+  renderDay();
+}
+
+function toggleDemo(cardId) {
+  if (openDemos.has(cardId)) {
+    openDemos.delete(cardId);
+  } else {
+    openDemos.add(cardId);
+  }
+  const area = document.getElementById('demo-' + cardId);
+  const btn = document.getElementById('demobtn-' + cardId);
+  if (area) {
+    area.classList.toggle('show', openDemos.has(cardId));
+    // Lazy load: set src only when opening
+    if (openDemos.has(cardId)) {
+      const img = area.querySelector('img');
+      if (img && !img.src) {
+        img.src = img.dataset.src;
+        img.onload = function() { this.classList.add('loaded'); };
+      }
+    }
+  }
+  if (btn) {
+    btn.classList.toggle('open', openDemos.has(cardId));
+    btn.textContent = openDemos.has(cardId) ? 'Hide demo' : 'How to';
+  }
+}
+
+// Build exercise card HTML
+function exerciseCard(ex, globalIdx, day, number) {
+  const isDone = doneState[day].includes(globalIdx);
+  const c = COLORS[day];
+  const gifPath = EXERCISE_GIFS[ex.name];
+  const cardId = day + '-' + globalIdx;
+  const isOpen = openDemos.has(cardId);
+
+  let demoHtml = '';
+  if (gifPath) {
+    const gifUrl = GIF_BASE + gifPath;
+    demoHtml = `
+      <div class="demo-area${isOpen ? ' show' : ''}" id="demo-${cardId}">
+        <div class="demo-gif-wrap">
+          <div class="demo-loading">Loading animation...</div>
+          <img ${isOpen ? `src="${gifUrl}"` : `data-src="${gifUrl}"`}
+               alt="How to: ${ex.name}"
+               class="${isOpen ? 'loaded' : ''}"
+               onload="this.classList.add('loaded')"
+               loading="lazy">
+        </div>
+      </div>`;
+  }
+
+  return `
+    <div class="exercise-card${isDone ? ' done' : ''}" data-idx="${globalIdx}">
+      <div class="ex-top">
+        <div class="ex-info">
+          <div class="ex-number">${number}</div>
+          <div class="ex-name">${ex.name}</div>
+          ${ex.muscle ? `<div class="ex-muscle">${ex.muscle}</div>` : ''}
+        </div>
+        <div class="ex-actions">
+          <button class="done-btn${isDone ? ' checked' : ''}" onclick="toggleDone('${day}',${globalIdx})">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="ex-bottom">
+        <span class="ex-pill" style="background:${c}33;color:${c}">${ex.sets}</span>
+        ${ex.rest ? `<button class="rest-btn" style="border-color:${c};color:${c}" onclick="startTimer(${ex.rest},'${ex.name.replace(/'/g,"\\'")}')">Rest ${ex.rest}s</button>` : ''}
+        ${gifPath ? `<button class="demo-btn${isOpen ? ' open' : ''}" id="demobtn-${cardId}" onclick="toggleDemo('${cardId}')">${isOpen ? 'Hide demo' : 'How to'}</button>` : ''}
+      </div>
+      ${demoHtml}
+    </div>`;
+}
+
+function renderDay() {
+  const day = activeDay;
+  const data = WORKOUT[day];
+  const c = COLORS[day];
+  const dayIdx = DAYS.indexOf(day);
+  let html = '';
+
+  // Hero
+  html += `<div class="hero" style="background:${c}22">
+    <div class="hero-day">${DAY_NAMES[dayIdx]}</div>
+    <div class="hero-focus">${data.focus}</div>
+    <div class="hero-time">${data.subtitle} &middot; 60 min</div>
+  </div>`;
+
+  // Progress
+  if (day !== 'sat') {
+    const total = getAllExerciseCount(day);
+    const done = doneState[day].length;
+    const pct = total > 0 ? (done / total) * 100 : 0;
+    html += `<div class="progress-wrap">
+      <div class="progress-label">${done} / ${total} exercises done</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${c}"></div></div>
+    </div>`;
+  }
+
+  // Warmup
+  if (data.warmup) {
+    html += `<div class="strip">
+      <div class="strip-icon">&#9757;</div>
+      <div><div class="strip-label">Warm-up</div><div class="strip-text">${data.warmup}</div></div>
+    </div>`;
+  }
+
+  // Saturday special
+  if (day === 'sat') {
+    html += `<div class="section-divider">Pick one option</div>`;
+    data.options.forEach(opt => {
+      html += `<div class="sat-option">
+        <div class="sat-label" style="color:${c}">Option ${opt.label}</div>
+        <div class="sat-exercise">${opt.exercise}</div>
+        <div class="sat-details">${opt.duration} &middot; ${opt.intensity}</div>
+      </div>`;
+    });
+    html += `<div class="sat-tip">Tired from the week? Pick A or B. Feeling energetic? Pick C.</div>`;
+    document.getElementById('mainContent').innerHTML = html;
+    return;
+  }
+
+  // Regular exercises
+  let globalIdx = 0;
+
+  if (data.exercises) {
+    data.exercises.forEach((ex, i) => {
+      html += exerciseCard(ex, globalIdx, day, `#${i + 1}`);
+      globalIdx++;
+    });
+  }
+
+  // Friday sections
+  if (data.sections) {
+    let exNum = 1;
+    data.sections.forEach(section => {
+      html += `<div class="section-divider">${section.label}</div>`;
+      section.exercises.forEach(ex => {
+        html += exerciseCard(ex, globalIdx, day, `#${exNum}`);
+        globalIdx++;
+        exNum++;
+      });
+    });
+  }
+
+  // Core
+  if (data.core) {
+    html += `<div class="section-divider">Core Circuit</div>`;
+    const coreLabels = ['A','B','C','D','E'];
+    data.core.forEach((ex, i) => {
+      html += exerciseCard(ex, globalIdx, day, coreLabels[i] || `#${i+1}`);
+      globalIdx++;
+    });
+  }
+
+  // Cardio finish
+  if (data.cardio) {
+    html += `<div class="strip" style="margin-top:16px">
+      <div class="strip-icon">&#127939;</div>
+      <div><div class="strip-label">Cardio Finish</div><div class="strip-text">${data.cardio}</div></div>
+    </div>`;
+  } else if (data.cardioNote) {
+    html += `<div class="strip" style="margin-top:16px">
+      <div class="strip-icon">&#128293;</div>
+      <div><div class="strip-label">Cardio Finish</div><div class="strip-text">${data.cardioNote}</div></div>
+    </div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+// Timer
+let timerInterval = null;
+let timerAudioCtx = null;
+
+function getAudioCtx() {
+  if (!timerAudioCtx) timerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return timerAudioCtx;
+}
+
+function beep(freq, duration) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.value = 0.15;
+    osc.start(ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+function startTimer(seconds, exerciseName) {
+  const overlay = document.getElementById('timerOverlay');
+  const circle = document.getElementById('timerCircle');
+  const timeEl = document.getElementById('timerTime');
+  const exNameEl = document.getElementById('timerExName');
+  const c = COLORS[activeDay];
+
+  circle.style.stroke = c;
+  exNameEl.textContent = exerciseName;
+
+  const circumference = 628.32;
+  let remaining = seconds;
+  const total = seconds;
+
+  function update() {
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    timeEl.textContent = `${mins}:${String(secs).padStart(2, '0')}`;
+    const progress = (total - remaining) / total;
+    circle.style.strokeDashoffset = circumference * (1 - progress);
+
+    if (remaining === 3 || remaining === 2 || remaining === 1) {
+      beep(660, 0.15);
+    }
+    if (remaining === 0) {
+      beep(880, 0.4);
+      clearInterval(timerInterval);
+      timerInterval = null;
+      setTimeout(() => { overlay.classList.remove('show'); }, 600);
+      return;
+    }
+    remaining--;
+  }
+
+  overlay.classList.add('show');
+  update();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(update, 1000);
+}
+
+document.getElementById('timerSkip').addEventListener('click', () => {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  document.getElementById('timerOverlay').classList.remove('show');
+});
+
+// Init
+document.getElementById('headerDate').textContent = formatHeaderDate();
+loadState();
+activeDay = getCurrentDayKey();
+document.documentElement.style.setProperty('--day-color', COLORS[activeDay]);
+renderTabs();
+renderDay();
+</script>
+</body>
+</html>
