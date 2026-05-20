@@ -519,7 +519,6 @@ body {
 <div class="header">
   <div class="header-top">
     <div class="app-name">Piyush's Gym Plan</div>
-    <div class="header-date" id="headerDate"></div>
   </div>
   <div class="day-tabs" id="dayTabs"></div>
 </div>
@@ -1013,7 +1012,6 @@ document.getElementById('timerSkip').addEventListener('click', () => {
 });
 
 // Init
-document.getElementById('headerDate').textContent = formatHeaderDate();
 loadState();
 activeDay = getCurrentDayKey();
 document.documentElement.style.setProperty('--day-color', COLORS[activeDay]);
